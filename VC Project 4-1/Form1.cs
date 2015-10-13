@@ -54,12 +54,14 @@ namespace VC_Project_4_1
             //case the user wants to have some more fun
 
         }
+
+        //method for area
         public decimal CalculateArea(decimal length, decimal width)
         {
             decimal area = length * width;
             return area;
         }
-
+        //method for perimeter
         public decimal CalculatePerimeter(decimal length, decimal width)
         {
             decimal perimeter = (2 * length) + (2 * width);
@@ -71,7 +73,7 @@ namespace VC_Project_4_1
             //Event handler for the exit button
             this.Close();
         }
-
+        //data type validation
         public bool IsDecimal(TextBox textbox, string name)
         {
             decimal number = 0;
@@ -88,7 +90,7 @@ namespace VC_Project_4_1
             }
 
         }
-
+        //presence validation
         public bool IsPresent(TextBox textbox, string name)
         {
             if (textbox.Text == "")
@@ -103,7 +105,7 @@ namespace VC_Project_4_1
             }
 
         }
-
+        //Form validation
         public bool IsValidForm()
         {
             return
