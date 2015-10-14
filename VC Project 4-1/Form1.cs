@@ -32,26 +32,36 @@ namespace VC_Project_4_1
 
         private void btnCalculate_Click(object sender, EventArgs e)
         {
-
-            //validate form
-            if (!IsValidForm())
+            try
             {
-               return;
+                //validate form
+                bool formValid = IsValidForm();
+                if (formValid == false)
+                {
+                    return;
+                }
+
+                //Take in the user inputs and convert to decimal
+                //Then create 2 more variables to hold the answers
+                //Do some math and display in the read only textboxes
+                decimal width = Convert.ToDecimal(txtWidth.Text);
+                decimal length = Convert.ToDecimal(txtLength.Text);
+                decimal area = CalculateArea(length, width);
+                decimal perimeter = CalculatePerimeter(length, width);
+
+                txtArea.Text = Convert.ToString(area);
+                txtPerimeter.Text = Convert.ToString(perimeter);
+                txtLength.Focus();
+
+                //the last line brings the focus back to the first box in
+                //case the user wants to have some more fun
             }
-            //Take in the user inputs and convert to decimal
-            //Then create 2 more variables to hold the answers
-            //Do some math and display in the read only textboxes
-            decimal width = Convert.ToDecimal(txtWidth.Text);
-            decimal length = Convert.ToDecimal(txtLength.Text);
-            decimal area = CalculateArea(length, width);
-            decimal perimeter = CalculatePerimeter(length, width);
+            catch (Exception ex)
+            {
 
-            txtArea.Text = Convert.ToString(area);
-            txtPerimeter.Text = Convert.ToString(perimeter);
-            txtLength.Focus();
+                MessageBox.Show(ex.Message + "\n\n" + ex.GetType().ToString() + "\n" + ex.StackTrace, "Exception");
+            }
 
-            //the last line brings the focus back to the first box in
-            //case the user wants to have some more fun
 
         }
 
@@ -105,12 +115,44 @@ namespace VC_Project_4_1
             }
 
         }
+        //range validation
+        private bool IsWithinRange(TextBox textbox, string name, decimal min, decimal max)
+        {
+            decimal number = Convert.ToDecimal(textbox.Text);
+            if (number >= max || number <= min)
+            {
+                MessageBox.Show(name + " must be between " + min.ToString() + " and " + max.ToString(), "Entry Error");
+                textbox.Clear();
+                textbox.Focus();
+                return false;
+            }
+
+            return true;
+        }
+
         //Form validation
         public bool IsValidForm()
         {
             return
-                IsPresent(txtLength, "Length") && IsDecimal(txtLength, "Length") 
-                && IsPresent(txtWidth, "Width") && IsDecimal(txtWidth, "Width");
+                IsPresent(txtLength, "Length") && IsDecimal(txtLength, "Length") && IsWithinRange(txtLength, "Length", 0, 10000000)
+                && IsPresent(txtWidth, "Width") && IsDecimal(txtWidth, "Width") && IsWithinRange(txtWidth, "Width", 0, 10000000);
+        }
+        //clear results boxes when length is changed
+        private void txtLength_TextChanged(object sender, EventArgs e)
+        {
+            ClearAnswers();
+        }
+        //clear results boxes when width is changed
+        private void txtWidth_TextChanged(object sender, EventArgs e)
+        {
+            ClearAnswers();
+        }
+        //method that clears the results boxes, to be called on the 
+        //text changed events for either input
+        public void ClearAnswers()
+        {
+            txtPerimeter.Clear();
+            txtArea.Clear();
         }
     }
 }
